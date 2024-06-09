@@ -8,6 +8,7 @@ const App = () => {
   const [fileTypes, setFileTypes] = useState([]);
   const [output, setOutput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const availableFileTypes = [
     '.txt',
     '.py',
@@ -90,10 +91,24 @@ const App = () => {
     alert('Output copied to clipboard!');
   };
 
+  const handleReset = () => {
+    setRepoUrl('');
+    setDocUrl('');
+    setFileTypes([]);
+    setOutput('');
+  };
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   return (
-    <div className="App">
+    <div className={`App ${isDarkMode ? 'dark-mode' : ''}`}>
       <header className="App-header">
         <h1>GitHub Repo to Text</h1>
+        <button className="toggle-dark-mode" onClick={toggleDarkMode}>
+          {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+        </button>
         <form onSubmit={handleSubmit}>
           <div>
             <label>Repository URL:</label>
@@ -129,6 +144,9 @@ const App = () => {
           </div>
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Fetching...' : 'Submit'}
+          </button>
+          <button type="button" onClick={handleReset}>
+            Reset
           </button>
         </form>
         {output && (
