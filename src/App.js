@@ -64,11 +64,14 @@ function App() {
     try {
       const fileTypesToSend =
         fileTypes.length > 0 ? fileTypes : availableFileTypes;
-      const response = await axios.post('https://git-to-text-backend.vercel.app/api/scrape', {
-        repoUrl,
-        docUrl,
-        selectedFileTypes: fileTypesToSend,
-      });
+      const response = await axios.post(
+        'https://git-to-text-backend.vercel.app/api/scrape',
+        {
+          repoUrl,
+          docUrl,
+          selectedFileTypes: fileTypesToSend,
+        }
+      );
       setOutput(response.data.filename);
     } catch (error) {
       console.error('Error during submission:', error);
