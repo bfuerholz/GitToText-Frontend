@@ -7,11 +7,53 @@ function App() {
   const [docUrl, setDocUrl] = useState('');
   const [output, setOutput] = useState('');
   const [fileTypes, setFileTypes] = useState([
-    '.txt', '.py', '.js', '.sql', '.env', '.json', '.html', '.css', '.md',
-    '.java', '.cpp', '.c', '.cs', '.php', '.rb', '.xml', '.yml', '.sh', '.swift',
-    '.h', '.pyw', '.asm', '.bat', '.cmd', '.cls', '.coffee', '.erb', '.go', '.groovy',
-    '.htaccess', '.jsp', '.lua', '.make', '.matlab', '.pas', '.perl', '.pl', '.ps1',
-    '.r', '.scala', '.scm', '.sln', '.svg', '.vb', '.vbs', '.xhtml', '.xsl'
+    '.txt',
+    '.py',
+    '.js',
+    '.sql',
+    '.env',
+    '.json',
+    '.html',
+    '.css',
+    '.md',
+    '.java',
+    '.cpp',
+    '.c',
+    '.cs',
+    '.php',
+    '.rb',
+    '.xml',
+    '.yml',
+    '.sh',
+    '.swift',
+    '.h',
+    '.pyw',
+    '.asm',
+    '.bat',
+    '.cmd',
+    '.cls',
+    '.coffee',
+    '.erb',
+    '.go',
+    '.groovy',
+    '.htaccess',
+    '.jsp',
+    '.lua',
+    '.make',
+    '.matlab',
+    '.pas',
+    '.perl',
+    '.pl',
+    '.ps1',
+    '.r',
+    '.scala',
+    '.scm',
+    '.sln',
+    '.svg',
+    '.vb',
+    '.vbs',
+    '.xhtml',
+    '.xsl',
   ]);
 
   const handleSubmit = async (event) => {
@@ -20,7 +62,7 @@ function App() {
       const response = await axios.post('http://localhost:5000/scrape', {
         repoUrl,
         docUrl,
-        selectedFileTypes: fileTypes
+        selectedFileTypes: fileTypes,
       });
       setOutput(response.data.response);
     } catch (error) {
@@ -53,7 +95,9 @@ function App() {
             onChange={(e) => setDocUrl(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn btn-primary btn-block">Submit</button>
+        <button type="submit" className="btn btn-primary btn-block">
+          Submit
+        </button>
       </form>
       {output && <div className="outputArea mt-4">{output}</div>}
     </div>
