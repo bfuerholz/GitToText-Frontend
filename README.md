@@ -29,8 +29,8 @@ For detailed deployment steps, refer to the Vercel documentation.
 
 ## Screenshots
 
-![Main Interface](screenshots/screenshot1.png)
-![Dark Mode](screenshots/screenshot2.png)
+![Main Interface](public/screenshot1.png)
+![Dark Mode](public/screenshot2.png)
 
 ## TODOs
 
