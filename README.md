@@ -1,19 +1,37 @@
-# GitToText Frontend
+# GitToText-Frontend
 
-This is the frontend part of the GitToText project.
+[![GitHub issues](https://img.shields.io/github/issues/bfuerholz/GitToText-Frontend)](https://github.com/bfuerholz/GitToText-Frontend/issues)
+[![GitHub forks](https://img.shields.io/github/forks/bfuerholz/GitToText-Frontend)](https://github.com/bfuerholz/GitToText-Frontend/network)
+[![GitHub stars](https://img.shields.io/github/stars/bfuerholz/GitToText-Frontend)](https://github.com/bfuerholz/GitToText-Frontend/stargazers)
+[![GitHub license](https://img.shields.io/github/license/bfuerholz/GitToText-Frontend)](https://github.com/bfuerholz/GitToText-Frontend/blob/main/LICENSE)
 
-## Available Scripts
+GitToText-Frontend is a React-based frontend application for the GitToText project. It provides a user-friendly interface to interact with the backend and fetch repository data in text format.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **GitHub Repository URL Input**: Enter the URL of the GitHub repository you want to fetch files from.
+- **File Types Selection**: Specify the types of files you want to include.
+- **Dark Mode**: Toggle between light and dark themes.
+- **Output Display and Copy**: View and copy the fetched repository content.
 
-Runs the app in the development mode.
+## How to Use
 
-### `npm test`
+- Visit the live application URL.
+- Enter the GitHub repository URL.
+- Select the file types you want to include.
+- Click on the fetch button to retrieve and display the content.
 
-Launches the test runner in the interactive watch mode.
+## Deployment
 
-### `npm run build`
+The frontend is deployed on Vercel. The backend URL in the `App.js` file is set to the deployed backend URL on Vercel.
 
-Builds the app for production to the `build` folder.
+For detailed deployment steps, refer to the Vercel documentation.
+
+## Screenshots
+
+![Main Interface](screenshot1.png)
+![Dark Mode](screenshot2.png)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
