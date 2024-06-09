@@ -1,114 +1,61 @@
-import React, { useState } from "react";
-import axios from "axios";
-import "./App.css";
-
-const FILE_TYPES = [
-  ".txt", ".py", ".js", ".sql", ".env", ".json", ".html", ".css", ".md",
-  ".java", ".cpp", ".c", ".cs", ".php", ".rb", ".xml", ".yml", ".sh",
-  ".swift", ".h", ".pyw", ".asm", ".bat", ".cmd", ".cls", ".coffee", ".erb",
-  ".go", ".groovy", ".htaccess", ".jsp", ".lua", ".make", ".matlab", ".pas",
-  ".perl", ".pl", ".ps1", ".r", ".scala", ".scm", ".sln", ".svg", ".vb", ".vbs",
-  ".xhtml", ".xsl"
-];
+import React, { useState } from 'react';
+import axios from 'axios';
+import './App.css';
 
 function App() {
-  const [repoUrl, setRepoUrl] = useState("");
-  const [docUrl, setDocUrl] = useState("");
-  const [fileTypes, setFileTypes] = useState(FILE_TYPES);
-  const [response, setResponse] = useState("");
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [repoUrl, setRepoUrl] = useState('');
+  const [docUrl, setDocUrl] = useState('');
+  const [output, setOutput] = useState('');
+  const [fileTypes, setFileTypes] = useState([
+    '.txt', '.py', '.js', '.sql', '.env', '.json', '.html', '.css', '.md',
+    '.java', '.cpp', '.c', '.cs', '.php', '.rb', '.xml', '.yml', '.sh', '.swift',
+    '.h', '.pyw', '.asm', '.bat', '.cmd', '.cls', '.coffee', '.erb', '.go', '.groovy',
+    '.htaccess', '.jsp', '.lua', '.make', '.matlab', '.pas', '.perl', '.pl', '.ps1',
+    '.r', '.scala', '.scm', '.sln', '.svg', '.vb', '.vbs', '.xhtml', '.xsl'
+  ]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const fileTypesToSend = fileTypes.length ? fileTypes : ["all"];
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      console.log("Submitting form with data:", {
+      const response = await axios.post('http://localhost:5000/scrape', {
         repoUrl,
         docUrl,
-        selectedFileTypes: fileTypesToSend,
+        selectedFileTypes: fileTypes
       });
-
-      const res = await axios.post("http://localhost:5000/scrape", {
-        repoUrl,
-        docUrl,
-        selectedFileTypes: fileTypesToSend,
-      });
-
-      setResponse(res.data.response);
-    } catch (err) {
-      console.error("Error during submission:", err);
+      setOutput(response.data.response);
+    } catch (error) {
+      console.error('Error during submission:', error);
     }
   };
 
-  const handleCopyText = () => {
-    const outputArea = document.querySelector(".outputArea");
-    outputArea.select();
-    document.execCommand("copy");
-  };
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
   return (
-    <div className={`container ${isDarkMode ? "dark-mode" : ""}`}>
-      <div className="header">
-        <h1>GitToText</h1>
-      </div>
+    <div className="container">
+      <h1 className="text-center">GitToText</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Repository URL:
+        <div className="form-group">
+          <label htmlFor="repoUrl">Repository URL</label>
           <input
             type="text"
+            className="form-control"
+            id="repoUrl"
             value={repoUrl}
             onChange={(e) => setRepoUrl(e.target.value)}
             required
           />
-        </label>
-        <br />
-        <label>
-          Documentation URL (optional):
+        </div>
+        <div className="form-group">
+          <label htmlFor="docUrl">Documentation URL</label>
           <input
             type="text"
+            className="form-control"
+            id="docUrl"
             value={docUrl}
             onChange={(e) => setDocUrl(e.target.value)}
           />
-        </label>
-        <br />
-        <label>
-          Select File Types:
-          <select
-            multiple
-            value={fileTypes}
-            onChange={(e) =>
-              setFileTypes(Array.from(e.target.selectedOptions, (option) => option.value))
-            }
-          >
-            {FILE_TYPES.map((fileType) => (
-              <option key={fileType} value={fileType}>
-                {fileType}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div className="button">
-          <button type="submit">Transform</button>
-          <button type="button" onClick={handleCopyText}>
-            Copy Output
-          </button>
         </div>
+        <button type="submit" className="btn btn-primary btn-block">Submit</button>
       </form>
-      <textarea
-        className="outputArea"
-        value={response}
-        readOnly
-      />
-      <div className="button">
-        <button onClick={toggleTheme}>
-          {isDarkMode ? "Light Mode" : "Dark Mode"}
-        </button>
-      </div>
+      {output && <div className="outputArea mt-4">{output}</div>}
     </div>
   );
 }
