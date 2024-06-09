@@ -2,89 +2,112 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const App = () => {
+function App() {
   const [repoUrl, setRepoUrl] = useState('');
   const [docUrl, setDocUrl] = useState('');
   const [fileTypes, setFileTypes] = useState([]);
   const [output, setOutput] = useState('');
-  const [theme, setTheme] = useState('light');
+  const [darkMode, setDarkMode] = useState(false);
+
+  const availableFileTypes = [
+    '.txt',
+    '.py',
+    '.js',
+    '.sql',
+    '.env',
+    '.json',
+    '.html',
+    '.css',
+    '.md',
+    '.java',
+    '.cpp',
+    '.c',
+    '.cs',
+    '.php',
+    '.rb',
+    '.xml',
+    '.yml',
+    '.sh',
+    '.swift',
+    '.h',
+    '.pyw',
+    '.asm',
+    '.bat',
+    '.cmd',
+    '.cls',
+    '.coffee',
+    '.erb',
+    '.go',
+    '.groovy',
+    '.htaccess',
+    '.jsp',
+    '.lua',
+    '.make',
+    '.matlab',
+    '.pas',
+    '.perl',
+    '.pl',
+    '.ps1',
+    '.r',
+    '.scala',
+    '.scm',
+    '.sln',
+    '.svg',
+    '.vb',
+    '.vbs',
+    '.xhtml',
+    '.xsl',
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const fileTypesToSend = [
-      '.txt',
-      '.py',
-      '.js',
-      '.sql',
-      '.env',
-      '.json',
-      '.html',
-      '.css',
-      '.md',
-      '.java',
-      '.cpp',
-      '.c',
-      '.cs',
-      '.php',
-      '.rb',
-      '.xml',
-      '.yml',
-      '.sh',
-      '.swift',
-      '.h',
-      '.pyw',
-      '.asm',
-      '.bat',
-      '.cmd',
-      '.cls',
-      '.coffee',
-      '.erb',
-      '.go',
-      '.groovy',
-      '.htaccess',
-      '.jsp',
-      '.lua',
-      '.make',
-      '.matlab',
-      '.pas',
-      '.perl',
-      '.pl',
-      '.ps1',
-      '.r',
-      '.scala',
-      '.scm',
-      '.sln',
-      '.svg',
-      '.vb',
-      '.vbs',
-      '.xhtml',
-      '.xsl',
-    ];
-
     try {
-      const response = await axios.post('http://localhost:5000/scrape', {
+      const fileTypesToSend =
+        fileTypes.length > 0 ? fileTypes : availableFileTypes;
+      const response = await axios.post('https://your-backend-url/api/scrape', {
         repoUrl,
         docUrl,
         selectedFileTypes: fileTypesToSend,
       });
-      setOutput(response.data.response);
+      setOutput(response.data.filename);
     } catch (error) {
       console.error('Error during submission:', error);
+      alert('Error fetching data. Please check the console for more details.');
     }
   };
 
+  const handleReset = () => {
+    setRepoUrl('');
+    setDocUrl('');
+    setFileTypes([]);
+    setOutput('');
+  };
+
+  const handleFileTypeChange = (e) => {
+    const value = e.target.value;
+    setFileTypes((prevTypes) =>
+      prevTypes.includes(value)
+        ? prevTypes.filter((type) => type !== value)
+        : [...prevTypes, value]
+    );
+  };
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
-    <div className={`App ${theme}`}>
-      <header>
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+      <header className="App-header">
         <h1>GitToText</h1>
-        <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-          {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+        <button onClick={toggleDarkMode}>
+          {darkMode ? 'Light Mode' : 'Dark Mode'}
         </button>
       </header>
       <main>
         <form onSubmit={handleSubmit}>
           <label>
-            GitHub Repository URL:
+            Repository URL:
             <input
               type="url"
               value={repoUrl}
@@ -100,12 +123,29 @@ const App = () => {
               onChange={(e) => setDocUrl(e.target.value)}
             />
           </label>
+          <fieldset>
+            <legend>Select File Types:</legend>
+            {availableFileTypes.map((type) => (
+              <label key={type}>
+                <input
+                  type="checkbox"
+                  value={type}
+                  checked={fileTypes.includes(type)}
+                  onChange={handleFileTypeChange}
+                />
+                {type}
+              </label>
+            ))}
+          </fieldset>
           <button type="submit">Submit</button>
+          <button type="button" onClick={handleReset}>
+            Reset
+          </button>
         </form>
         {output && (
           <div className="outputArea">
             <h2>Output</h2>
-            <textarea readOnly value={output}></textarea>
+            <textarea value={output} readOnly />
             <button onClick={() => navigator.clipboard.writeText(output)}>
               Copy to Clipboard
             </button>
@@ -114,6 +154,6 @@ const App = () => {
       </main>
     </div>
   );
-};
+}
 
 export default App;
